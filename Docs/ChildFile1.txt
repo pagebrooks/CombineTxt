@@ -1,0 +1,6 @@
+  C|1000|TSX
+  C|1000|TS
+  C|1000|MDX
+  C|1001|Maxima
+  C|1001|Pathfinder
+  C|1002|Focus

@@ -1,0 +1,8 @@
+1000|Acura|1990
+1|Sub Record Information
+1001|Nissan|1990
+2|Sub Record Information
+1002|Ford|1990
+3|Sub Record Information
+1003|Toyota|1990
+4|Sub Record Information
