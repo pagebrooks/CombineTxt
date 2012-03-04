@@ -10,6 +10,8 @@ namespace CombineTxt
     {
         static void Main(string[] args)
         {
+
+
             CombineTxt.With(@"..\..\..\Docs\ParentFile.txt")
                 .DefineKeyBy(l => l.Split('|')[1])
                 .ForEachLine(l => l.Trim())
@@ -28,6 +30,8 @@ namespace CombineTxt
                                              return trimmedLine.Substring(2, trimmedLine.Length - 2);
                                           })
                         .WriteResultTo(@"..\..\..\Docs\Output2.txt");
+
+            Console.Read();
         }
     }
 }

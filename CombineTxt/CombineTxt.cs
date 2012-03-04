@@ -11,13 +11,13 @@ namespace CombineTxt
         private readonly string _fileName;
         private Func<string, string> _forEachFunc;
         private Func<string, bool> _newRecordFunc;
-        private Action<string, IEnumerable<Dictionary<string, List<string>>>> _unMatchedFunc; 
+        private Action<List<string>> _unMatchedFunc;
 
         private CombineTxt(string fileName)
         {
             _newRecordFunc = s => true;
             _forEachFunc = s => s;
-            _unMatchedFunc = (s,t) => {};
+            _unMatchedFunc = null;
             _fileName = fileName;
         }
 
@@ -45,19 +45,17 @@ namespace CombineTxt
             return this;
         }
 
-        public CombineTxtInfo JoinTo(string fileName, Action<string, IEnumerable<Dictionary<string, List<string>>>> unmatchedRecords = null)
+        public CombineTxtInfo JoinTo(string fileName, Action<List<string>> noMatch = null)
         {
             CombineTxt manipulation = new CombineTxt(fileName);
             manipulation.Parent = this;
-            if (unmatchedRecords != null)
-                manipulation._unMatchedFunc = unmatchedRecords;
+            manipulation._unMatchedFunc = noMatch;
             return new CombineTxtInfo(manipulation);
         }
 
         public void WriteResultTo(string fileName)
         {
             var children = new List<Dictionary<string, List<string>>>();
-
             CombineTxt m = this;
 
             while (m.Parent != null)
@@ -83,6 +81,7 @@ namespace CombineTxt
 
                     sr.Close();
                 }
+
                 children.Add(matchDictionary);
                 m = m.Parent;
             }
@@ -112,6 +111,23 @@ namespace CombineTxt
 
                 WriteChildren(sw, previousKey, children);
                 sw.Close();
+            }
+
+            m = this;
+            int i = 0;
+            while (m.Parent != null)
+            {
+                List<string> unMatchedItems = new List<string>();
+                foreach (var matchItem in children[i++])
+                {
+                    unMatchedItems.AddRange(matchItem.Value);
+                }
+                if (m._unMatchedFunc != null)
+                {
+                    m._unMatchedFunc(unMatchedItems);
+                }
+                m = m.Parent;
+
             }
 
             return;
