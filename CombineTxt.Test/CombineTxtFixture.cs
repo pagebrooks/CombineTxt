@@ -13,7 +13,7 @@ namespace CombineTxt.Test
         public void With_Creates_New_CombineTxtInfo_With_CombineTxt()
         {
             var c = CombineTxt.With("foo.txt");
-            Assert.AreEqual(typeof(CombineTxtInfoFixture), c.GetType());
+            Assert.AreEqual(typeof(CombineTxtInfo), c.GetType());
         }
     }
 }

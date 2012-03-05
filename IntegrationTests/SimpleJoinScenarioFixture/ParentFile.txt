@@ -1,0 +1,8 @@
+A|1000|Acura|1990
+B|1|Sub Record Information
+A|1001|Nissan|1990
+B|2|Sub Record Information
+A|1002|Ford|1990
+B|3|Sub Record Information
+A|1003|Toyota|1990
+B|4|Sub Record Information
