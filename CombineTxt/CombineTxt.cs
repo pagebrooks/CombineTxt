@@ -9,21 +9,28 @@ namespace CombineTxt
     public class CombineTxt
     {
         private readonly string _fileName;
+        private readonly Encoding _encoding;
         private Func<string, string> _forEachFunc;
         private Func<string, bool> _newRecordFunc;
         private Action<List<string>> _unMatchedFunc;
 
-        private CombineTxt(string fileName)
+        private CombineTxt(string fileName, Encoding encoding)
         {
             _newRecordFunc = s => true;
             _forEachFunc = s => s;
             _unMatchedFunc = null;
             _fileName = fileName;
+            _encoding = encoding;
         }
 
         public static CombineTxtInfo With(string fileName)
         {
-            CombineTxt manipulation = new CombineTxt(fileName);
+            return With(fileName, Encoding.UTF8);
+        }
+
+        public static CombineTxtInfo With(string fileName, Encoding encoding)
+        {
+            CombineTxt manipulation = new CombineTxt(fileName, encoding);
             return new CombineTxtInfo(manipulation);
         }
 
@@ -47,13 +54,23 @@ namespace CombineTxt
 
         public CombineTxtInfo JoinTo(string fileName, Action<List<string>> noMatch = null)
         {
-            CombineTxt manipulation = new CombineTxt(fileName);
+            return JoinTo(fileName, Encoding.UTF8, noMatch);
+        }
+
+        public CombineTxtInfo JoinTo(string fileName, Encoding encoding, Action<List<string>> noMatch = null)
+        {
+            CombineTxt manipulation = new CombineTxt(fileName, encoding);
             manipulation.Parent = this;
             manipulation._unMatchedFunc = noMatch;
             return new CombineTxtInfo(manipulation);
         }
 
         public void WriteResultTo(string fileName)
+        {
+            WriteResultTo(fileName, Encoding.UTF8);
+        }
+
+        public void WriteResultTo(string fileName, Encoding encoding)
         {
             var children = new List<Dictionary<string, List<string>>>();
             CombineTxt m = this;
@@ -62,7 +79,7 @@ namespace CombineTxt
             {
                 var matchDictionary = new Dictionary<string, List<string>>();
 
-                using (StreamReader sr = new StreamReader(m._fileName))
+                using (StreamReader sr = new StreamReader(m._fileName, m._encoding))
                 {
                     string line = null;
                     while ((line = sr.ReadLine()) != null)
@@ -86,8 +103,8 @@ namespace CombineTxt
                 m = m.Parent;
             }
 
-            using (StreamWriter sw = new StreamWriter(fileName))
-            using (StreamReader sr = new StreamReader(m._fileName))
+            using (StreamWriter sw = new StreamWriter(fileName, false, encoding))
+            using (StreamReader sr = new StreamReader(m._fileName, m._encoding))
             {
                 string line = null;
                 string key = null;
@@ -126,8 +143,8 @@ namespace CombineTxt
                 {
                     m._unMatchedFunc(unMatchedItems);
                 }
-                m = m.Parent;
 
+                m = m.Parent;
             }
 
             return;

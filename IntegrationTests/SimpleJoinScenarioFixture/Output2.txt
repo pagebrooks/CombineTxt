@@ -1,4 +1,4 @@
-A$1000$Acura$1990
+﻿A$1000$Acura$1990
 B$1$Sub Record Information
 A$1001$Nissan$1990
 B$2$Sub Record Information

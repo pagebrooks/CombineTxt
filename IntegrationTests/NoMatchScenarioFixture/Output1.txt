@@ -1,14 +1,10 @@
 ﻿A|1000|Acura|1990
-B|1|Sub Record Information
 C|1000|TSX
 C|1000|TS
 C|1000|MDX
 A|1001|Nissan|1990
-B|2|Sub Record Information
 C|1001|Maxima
 C|1001|Pathfinder
 A|1002|Ford|1990
-B|3|Sub Record Information
 C|1002|Focus
 A|1003|Toyota|1990
-B|4|Sub Record Information

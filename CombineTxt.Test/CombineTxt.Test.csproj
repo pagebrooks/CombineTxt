@@ -46,6 +46,7 @@
     <Compile Include="CombineTxtFixture.cs" />
     <Compile Include="CombineTxtInfoFixture.cs" />
     <Compile Include="IntegrationTests\SimpleJoinScenarioFixture.cs" />
+    <Compile Include="IntegrationTests\NoMatchScenarioFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
