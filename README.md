@@ -1,12 +1,11 @@
-Introduction
-============
+## Introduction
 
 CombineTxt is a fluent API for joining child files to a parent file.
 
-Example
-=======
+## Example
 
-ParentFile.txt
+
+### ParentFile.txt
 
 ```
 A|1000|Acura|1990
@@ -19,7 +18,7 @@ A|1003|Toyota|1990
 B|4|Sub Record Information
 ```
 
-ChildFile1.txt
+### ChildFile1.txt
 
 ```
 C|1000|TSX
@@ -31,7 +30,7 @@ C|1002|Focus
 ```
 
 
-Join Code
+### Join Code
 
 ```
 CombineTxt.With("ParentFile.txt")
@@ -42,7 +41,7 @@ CombineTxt.With("ParentFile.txt")
           .WriteResultTo("Output1.txt");
 ```
 
-Output1.txt
+### Output1.txt
 
 ```
 A|1000|Acura|1990
