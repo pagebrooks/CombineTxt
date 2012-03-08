@@ -32,7 +32,7 @@ C|1002|Focus
 
 ### Join Code
 
-```
+```c#
 CombineTxt.With("ParentFile.txt")
           .DefineKeyBy(l => l.Split('|')[1])
           .RecordDelimitedByStartingWith("A")
