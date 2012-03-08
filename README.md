@@ -1,6 +1,14 @@
 ## Introduction
 
-CombineTxt is a fluent API for joining child files to a parent file.
+CombineTxt is a fluent .NET API for joining child files to a parent file.
+
+## Features
+
+* Join multiple files to a single parent file.
+* Support for multi-line records in parent and child files.
+* Customized key functions for each file.
+* Optionally take action on unmatched child records.
+* Optionally format each line before joining.
 
 ## Example
 
