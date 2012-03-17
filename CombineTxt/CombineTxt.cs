@@ -1,26 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace CombineTxt
 {
     public class CombineTxt
     {
-        private readonly string _fileName;
-        private readonly Encoding _encoding;
-        private Func<string, string> _forEachFunc;
-        private Func<string, bool> _newRecordFunc;
-        private Action<List<string>> _unMatchedFunc;
+        private readonly StreamReaderProvider _readerProvider;
+        private Func<string, string> _forEachFunc = s => s;
+        private Func<string, bool> _newRecordFunc = s => true;
+        private Action<List<string>> _unMatchedFunc = null;
 
         private CombineTxt(string fileName, Encoding encoding)
         {
-            _newRecordFunc = s => true;
-            _forEachFunc = s => s;
-            _unMatchedFunc = null;
-            _fileName = fileName;
-            _encoding = encoding;
+            _readerProvider = new StreamReaderProvider(fileName, encoding);
+        }
+
+        public CombineTxt(Stream stream, Encoding encoding)
+        {
+            _readerProvider = new StreamReaderProvider(stream, encoding);
         }
 
         public static CombineTxtInfo With(string fileName)
@@ -31,6 +30,12 @@ namespace CombineTxt
         public static CombineTxtInfo With(string fileName, Encoding encoding)
         {
             CombineTxt manipulation = new CombineTxt(fileName, encoding);
+            return new CombineTxtInfo(manipulation);
+        }
+
+        public static CombineTxtInfo With(Stream stream, Encoding encoding)
+        {
+            CombineTxt manipulation = new CombineTxt(stream, encoding);
             return new CombineTxtInfo(manipulation);
         }
 
@@ -79,7 +84,7 @@ namespace CombineTxt
             {
                 var matchDictionary = new Dictionary<string, List<string>>();
 
-                using (StreamReader sr = new StreamReader(m._fileName, m._encoding))
+                using (StreamReader sr = _readerProvider.GetStreamReader())
                 {
                     string line = null;
                     while ((line = sr.ReadLine()) != null)
@@ -104,7 +109,7 @@ namespace CombineTxt
             }
 
             using (StreamWriter sw = new StreamWriter(fileName, false, encoding))
-            using (StreamReader sr = new StreamReader(m._fileName, m._encoding))
+            using (StreamReader sr = m._readerProvider.GetStreamReader())
             {
                 string line = null;
                 string key = null;
@@ -139,6 +144,7 @@ namespace CombineTxt
                 {
                     unMatchedItems.AddRange(matchItem.Value);
                 }
+
                 if (m._unMatchedFunc != null)
                 {
                     m._unMatchedFunc(unMatchedItems);

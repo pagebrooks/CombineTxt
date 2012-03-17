@@ -49,6 +49,7 @@
     <Compile Include="CombineTxt.cs" />
     <Compile Include="CombineTxtInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StreamReaderProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
