@@ -47,6 +47,7 @@
     <Compile Include="CombineTxtInfoFixture.cs" />
     <Compile Include="IntegrationTests\SimpleJoinScenarioFixture.cs" />
     <Compile Include="IntegrationTests\NoMatchScenarioFixture.cs" />
+    <Compile Include="IntegrationTests\StreamScenarioFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IntegrationTests\StreamReaderProviderFixture.cs" />
   </ItemGroup>

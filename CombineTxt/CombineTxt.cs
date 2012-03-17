@@ -33,6 +33,11 @@ namespace CombineTxt
             return new CombineTxtInfo(manipulation);
         }
 
+        public static CombineTxtInfo With(Stream stream)
+        {
+            return With(stream, Encoding.UTF8);
+        }
+
         public static CombineTxtInfo With(Stream stream, Encoding encoding)
         {
             CombineTxt manipulation = new CombineTxt(stream, encoding);
@@ -70,12 +75,42 @@ namespace CombineTxt
             return new CombineTxtInfo(manipulation);
         }
 
+        public CombineTxtInfo JoinTo(Stream stream, Action<List<string>> noMatch = null)
+        {
+            return JoinTo(stream, Encoding.UTF8, noMatch);
+        }
+
+        public CombineTxtInfo JoinTo(Stream stream, Encoding encoding, Action<List<string>> noMatch = null)
+        {
+            CombineTxt manipulation = new CombineTxt(stream, encoding);
+            manipulation.Parent = this;
+            manipulation._unMatchedFunc = noMatch;
+            return new CombineTxtInfo(manipulation);
+        }
+
+        public void WriteResultTo(string fileName, Encoding encoding)
+        {
+            StreamWriterProvider writerProvider = new StreamWriterProvider(fileName, encoding);
+            InternalWriteResultTo(writerProvider);
+        }
+
         public void WriteResultTo(string fileName)
         {
             WriteResultTo(fileName, Encoding.UTF8);
         }
 
-        public void WriteResultTo(string fileName, Encoding encoding)
+        public void WriteResultTo(Stream stream)
+        {
+            WriteResultTo(stream, Encoding.UTF8);
+        }
+
+        public void WriteResultTo(Stream stream, Encoding encoding)
+        {
+            StreamWriterProvider writerProvider = new StreamWriterProvider(stream, encoding, true);
+            InternalWriteResultTo(writerProvider);
+        }
+
+        private void InternalWriteResultTo(StreamWriterProvider writerProvider)
         {
             var children = new List<Dictionary<string, List<string>>>();
             CombineTxt m = this;
@@ -108,7 +143,7 @@ namespace CombineTxt
                 m = m.Parent;
             }
 
-            using (StreamWriter sw = new StreamWriter(fileName, false, encoding))
+            StreamWriter sw = writerProvider.GetStreamWriter();
             using (StreamReader sr = m._readerProvider.GetStreamReader())
             {
                 string line = null;
@@ -132,7 +167,12 @@ namespace CombineTxt
                 }
 
                 WriteChildren(sw, previousKey, children);
-                sw.Close();
+
+                if (!writerProvider.KeepStreamOpen)
+                {
+                    sw.Close();
+                    sw.Dispose();
+                }
             }
 
             m = this;
