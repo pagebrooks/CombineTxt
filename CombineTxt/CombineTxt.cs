@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using CombineTxt.LookupDictionary;
 
 namespace CombineTxt
 {
     public class CombineTxt
     {
+        private static ILookupDictionaryFactory _lookupDictionaryFactory;
+
         private readonly StreamReaderProvider _readerProvider;
         private Func<string, string> _forEachFunc = s => s;
         private Func<string, bool> _newRecordFunc = s => true;
@@ -112,12 +115,12 @@ namespace CombineTxt
 
         private void InternalWriteResultTo(StreamWriterProvider writerProvider)
         {
-            var children = new List<Dictionary<string, List<string>>>();
+            var children = new List<ILookupDictionary>();
             CombineTxt m = this;
 
             while (m.Parent != null)
             {
-                var matchDictionary = new Dictionary<string, List<string>>();
+                var matchDictionary = LookupDictionaryFactory.CreateLookupDictionary();
 
                 using (StreamReader sr = _readerProvider.GetStreamReader())
                 {
@@ -168,6 +171,9 @@ namespace CombineTxt
 
                 WriteChildren(sw, previousKey, children);
 
+                // StreamWriters assume they own the stream so they
+                // close the stream when they are disposed of.
+                sw.Flush();
                 if (!writerProvider.KeepStreamOpen)
                 {
                     sw.Close();
@@ -192,11 +198,9 @@ namespace CombineTxt
 
                 m = m.Parent;
             }
-
-            return;
         }
 
-        private void WriteChildren(StreamWriter sw, string key, IEnumerable<Dictionary<string, List<string>>> children)
+        private void WriteChildren(StreamWriter sw, string key, IEnumerable<ILookupDictionary> children)
         {
             foreach (var matchDictionary in children)
             {
@@ -208,7 +212,6 @@ namespace CombineTxt
                     }
 
                     matchDictionary.Remove(key);
-                    sw.Flush();
                 }
             }
         }
@@ -216,5 +219,10 @@ namespace CombineTxt
         public CombineTxt Parent { get; set; }
         public CombineTxtInfo KeyInfo { get; set; }
 
+        public static ILookupDictionaryFactory LookupDictionaryFactory
+        {
+            get { return _lookupDictionaryFactory ?? (_lookupDictionaryFactory = new DefaultLookupDictionaryFactory()); }
+            set { _lookupDictionaryFactory = value; }
+        }
     }
 }

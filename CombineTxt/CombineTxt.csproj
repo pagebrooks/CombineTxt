@@ -48,6 +48,10 @@
   <ItemGroup>
     <Compile Include="CombineTxt.cs" />
     <Compile Include="CombineTxtInfo.cs" />
+    <Compile Include="LookupDictionary\DefaultLookupDictionary.cs" />
+    <Compile Include="LookupDictionary\ILookupDictionaryFactory.cs" />
+    <Compile Include="LookupDictionary\ILookupDictionary.cs" />
+    <Compile Include="LookupDictionary\LookupDictionaryFactory.cs" />
     <Compile Include="StreamWriterProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamReaderProvider.cs" />
