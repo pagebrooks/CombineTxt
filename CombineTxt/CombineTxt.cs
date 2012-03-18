@@ -129,14 +129,7 @@ namespace CombineTxt
                     {
                         var filtered = m._forEachFunc(line);
                         var key = m.KeyInfo.KeyDefinition(filtered);
-                        if (matchDictionary.ContainsKey(key))
-                        {
-                            matchDictionary[key].Add(filtered);
-                        }
-                        else
-                        {
-                            matchDictionary.Add(key, new List<string> { filtered });
-                        }
+                        matchDictionary.Add(key, filtered);
                     }
 
                     sr.Close();

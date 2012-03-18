@@ -1,0 +1,6 @@
+﻿A|1|Test Line 1
+B|Sub Record Line 1
+A|2|Test Line 2
+B|Sub Record Line 2
+A|3|Test Line 3
+B|Sub Record Line 3

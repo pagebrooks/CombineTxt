@@ -12,9 +12,16 @@ namespace CombineTxt.LookupDictionary
             _dictionary = new Dictionary<string, List<string>>();
         }
 
-        public void Add(string key, List<string> record)
+        public void Add(string key, string record)
         {
-            _dictionary.Add(key, record);
+            if (_dictionary.ContainsKey(key))
+            {
+                _dictionary[key].Add(record);
+            }
+            else
+            {
+                _dictionary.Add(key, new List<string> { record });
+            }
         }
 
         public void Remove(string key)
